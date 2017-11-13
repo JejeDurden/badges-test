@@ -1,13 +1,14 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Star(models.Model):
-    pass
+    user = models.OneToOneField(User, primary_key=True)
 
 
 class Collector(models.Model):
-    pass
+    user = models.OneToOneField(User, primary_key=True)
 
 
 class Pioneer(models.Model):
-    pass
+    user = models.OneToOneField(User, primary_key=True)

@@ -34,4 +34,5 @@ class BadgeTestCase(TestCase):
         self.assertTrue(Collector.objects.filter(user=self.user))
 
     def test_pioneer(self):
+        self.client.login(username=self.user.username, password='password')
         self.assertTrue(Pioneer.objects.filter(user=self.user))

@@ -8,6 +8,7 @@ from .models import Model
 from .forms import ModelCreateForm
 from .processing import Processor
 
+from badges.models import Star, Collector, Pioneer
 
 class ModelCreateView(CreateView):
     form_class = ModelCreateForm
@@ -24,6 +25,15 @@ class ModelCreateView(CreateView):
         model.weight = processor.weigh()
         model.vertice_count = processor.count_vertices()
         model.save()
+
+        uploads = Model.objects.filter(user=model.user).count()
+        if uploads >= 5:
+            try:
+                collector = model.user.collector
+            except:
+                collector = Collector()
+                collector.user = model.user
+                collector.save()
 
         return super(ModelCreateView, self).form_valid(form)
 
@@ -44,3 +54,20 @@ class ModelDetailView(DetailView):
     queryset = Model.objects.all()
     slug_field = 'name'
     slug_url_kwarg = 'name'
+
+    def get_context_data(self, **kwargs):
+        name = kwargs['object'].name
+        model = Model.objects.get(name = name)
+        user = model.user
+        model.views += 1
+        model.save()
+
+        if model.views >= 100:
+            try:
+                star = user.star
+            except:
+                star = Star()
+                star.user = user
+                star.save()
+        context = super(ModelDetailView, self).get_context_data(**kwargs)
+        return context

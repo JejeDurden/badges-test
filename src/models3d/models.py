@@ -8,3 +8,4 @@ class Model(models.Model):
     user = models.ForeignKey(User, related_name='models')
     vertice_count = models.IntegerField(default=0)
     weight = models.IntegerField(default=0)
+    views = models.IntegerField(default=0)
